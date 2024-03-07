@@ -64,6 +64,9 @@ Include any instructions necessary for testing and any pertinent documentation i
 - Enable variant selection
 - Change the "add to cart" button to "Sold Out" when the product is unavailable.
 
+### Tip
+- You can clear your cart by visiting **/cart/clear**
+
 ## Section 2.1 - Featured Product Information
 
 - Establish a metafield for the product material, noting that the material is unique to each product.
