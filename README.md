@@ -1,9 +1,5 @@
 # Shopify Developer Assessment
 
-# Introduction
-
-Thank you for investing your time in completing our frontend technical assessment. Should you have any questions, don't hesitate to get in touch!
-
 ## Evaluation Criteria
 
 - Attention to detail
