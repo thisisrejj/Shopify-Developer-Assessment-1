@@ -68,12 +68,12 @@ Include any instructions necessary for testing and any pertinent documentation i
 - Enable variant selection
 - Change the "add to cart" button to "Sold Out" when the product is unavailable.
 
-### Section 2.1 - Featured Product Information
+## Section 2.1 - Featured Product Information
 
 - Establish a metafield for the product material, noting that the material is unique to each product.
 - Delivery information should be set globally
 
-
+### END
 
 "The only way to do great work is to love what you do. – Steve Jobs"
 
