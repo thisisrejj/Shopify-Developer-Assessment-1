@@ -4,9 +4,8 @@
 
 - Attention to detail
 - Knowledge of Shopify
-- Code quality (in terms of scalability, readability, and maintainability)
 - Mastery of HTML semantics, accessibility, and search engine optimization
-- Awareness of code and website performance
+- Mastery of CSS/SCSS
 - Responsive design skills
 - Ability to convert designs and requirements into functional code
  
@@ -27,7 +26,7 @@ Include any instructions necessary for testing and any pertinent documentation i
 
 ## What you'll need
 
-- SCSS
+- CSS/SCSS
 - JS
   - Using any JS framework is also allowed
 - Fonts
