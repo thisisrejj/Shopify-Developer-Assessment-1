@@ -19,10 +19,12 @@ After finishing, kindly submit the following items through email:
 
 ## Steps to Follow
 
-1. Set up a development store on Shopify using the provided [generated test data](https://shopify.dev/docs/apps/tools/development-stores/generated-data).
-2. Initiate a new, empty theme. Your focus will be solely on the homepage.
-3. Implement the designs found in Design folder into your theme, including creating a header and 2 distinct sections.
-Include any instructions necessary for testing and any pertinent documentation in your README.md file.
+1. Clone the project repository
+2. Implement the designs located in the /Design folder into your theme. This includes creating a header, footer, and customising two distinct sections
+3. Include all necessary instructions for testing, along with any relevant documentation, in your README.md file
+
+### Note
+Your focus will be solely on the homepage.
 
 ## What you'll need
 
@@ -35,7 +37,7 @@ Include any instructions necessary for testing and any pertinent documentation i
 
 ## Section 1 - Hero
 
-- Images used are Shopify stock images:
+- Images used are Shopify stock images. Please refer to [this link](https://www.shopify.com/stock-photos):
   - hands-hold-paint-items-over-a-pallet.jpg
   - photographer-working-at-his-desk.jpg
 - Providing a mobile-specific image is not mandatory; you can use a cropped portrait variation of the desktop image instead.
@@ -46,17 +48,16 @@ Include any instructions necessary for testing and any pertinent documentation i
 
 ## Section 2 - Feature Product
 
-- Develop a section dedicated to selecting the featured product.
-- Show basic product information, including:
+- A predefined schema exists within the section. Please update the code to display the following:
   - Product title
   - Price
-  - Product description; maximum of 55 words
+  - Product description limited to a maximum of 55 words; add an ellipsis if it exceeds the maximum word count.
   - Product tags
 - Implement the "add to cart" functionality using one of the following methods:
   - [Ajax Cart API](https://shopify.dev/docs/api/ajax/reference/cart)
   - Native Shopify "Add to Cart" form
 - After a product is added to the cart, the button should change to "Added to Cart."
-- The header should also update update the no indicator
+- The header should also update the no. indicator
 
 ### Optional
 - Include a quantity input field
