@@ -44,21 +44,21 @@ After finishing, kindly submit the following items through email:
 - Providing a mobile-specific image is not mandatory; you can use a cropped portrait variation of the desktop image instead.
 
 #### Optional
-- Text elements are structured as blocks to allow for rearrangement
+- Structure the text elements as blocks to allow for rearrangement
 - Consider incorporating additional configurable features that might appeal to clients.
 
 ## Section 2 - Feature Product
 
 - A predefined schema exists within the section. Please update the code to display the following:
   - Product title
-  - Price
+  - Price with discount
   - Product description limited to a maximum of 55 words; add an ellipsis if it exceeds the maximum word count.
   - Product tags
 - Implement the "add to cart" functionality using one of the following methods:
   - [Ajax Cart API](https://shopify.dev/docs/api/ajax/reference/cart)
   - Native Shopify "Add to Cart" form
 - After a product is added to the cart, the button should change to "Added to Cart."
-- The header should also update the no. indicator
+- The cart icon in the header should also update the no. indicator
 
 ### Optional
 - Include a quantity input field
@@ -70,7 +70,7 @@ After finishing, kindly submit the following items through email:
 
 ## Section 2.1 - Featured Product Information
 
-- Establish a metafield for the product material, noting that the material is unique to each product.
+- Create a metafield for the product material, noting that the material is unique to each product.
 - Delivery information should be set globally
 
 ### END
