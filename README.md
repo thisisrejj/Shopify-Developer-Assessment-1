@@ -23,9 +23,9 @@ After finishing, kindly submit the following items through email:
 2. Implement the designs found in the /Design folder or view them in [Figma](https://www.figma.com/file/efeh3dqcgKIE9156w4OGQ5/Shopify-Developer-Assessment?type=design&node-id=1%3A6&mode=dev&t=ZkV3x9FDw9eSZCLG-1) to incorporate them into your theme. This includes creating a header, footer, and customising two distinct sections.
 3. Include all necessary instructions for testing, along with any relevant documentation, in your README.md file
 
-### Note
-Your focus will be solely on the homepage.
-Please refer to this [link](https://www.shopify.com/au/brand-assets) to download the Shopify logo
+### Notes
+- Your focus will be solely on the homepage.
+- Please refer to this [link](https://www.shopify.com/au/brand-assets) to download the Shopify logo
 
 ## What you'll need
 
