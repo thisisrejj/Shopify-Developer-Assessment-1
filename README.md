@@ -25,6 +25,7 @@ After finishing, kindly submit the following items through email:
 
 ### Note
 Your focus will be solely on the homepage.
+Please refer to this [link](https://www.shopify.com/au/brand-assets) to download the Shopify logo
 
 ## What you'll need
 
