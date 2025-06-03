@@ -42,11 +42,11 @@
     </div>
 
     {% if product.metafields.custom.material %}
-      <p><strong>Material:</strong> {{ product.metafields.custom.material | strip_html }}</p>
+      <p><strong>Material:</strong> {{ product.metafields.custom.material | metafield_tag }}</p>
     {% endif %}
 
     {% if product.metafields.custom.delivery %}
-      <p><strong>Delivery:</strong> {{ product.metafields.custom.delivery | strip_html }}</p>
+      <p><strong>Delivery:</strong> {{ product.metafields.custom.delivery | metafield_tag }}</p>
     {% endif %}
 
     {% assign form_id = 'product-form-' | append: product.id %}
