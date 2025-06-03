@@ -88,3 +88,14 @@ border: 1px solid #000;
     border-top: 0;
     border-bottom: 0;
 }
+@media (max-width: 991.98px) {
+.featured-product .container {
+    flex-direction: column;
+    max-width: 80%;
+    margin-top: 20px;
+    overflow: hidden;
+}
+.product-accordion {
+    max-width: 80%;
+}
+}
