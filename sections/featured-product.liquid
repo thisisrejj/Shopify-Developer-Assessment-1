@@ -1,0 +1,126 @@
+{% schema %}
+{
+  "name": "Featured Product",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Product"
+    },
+    {
+      "type": "text",
+      "id": "delivery_info",
+      "label": "Delivery Information",
+      "default": "Standard delivery within 3-5 business days."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product"
+    }
+  ]
+}
+{% endschema %}
+
+{% assign product = all_products[section.settings.product] %}
+{% if product %}
+  <div class="featured-product">
+    <h2 class="product-title">{{ product.title }}</h2>
+
+    <div class="price">
+      {% if product.compare_at_price > product.price %}
+        <span class="sale-price">{{ product.price | money }}</span>
+        <span class="compare-price">{{ product.compare_at_price | money }}</span>
+      {% else %}
+        <span class="regular-price">{{ product.price | money }}</span>
+      {% endif %}
+    </div>
+
+    <div class="product-description">
+      {{ product.description | strip_html | truncatewords: 55, '…' }}
+    </div>
+
+    <div class="product-tags">
+      {% for tag in product.tags %}
+        <span class="tag">{{ tag }}</span>
+      {% endfor %}
+    </div>
+
+    {% if product.metafields.custom.material %}
+      <p><strong>Material:</strong> {{ product.metafields.custom.material }}</p>
+    {% endif %}
+
+    <p><strong>Delivery:</strong> {{ section.settings.delivery_info }}</p>
+
+    {% form 'product', product, id: "product-form-" | append: product.id %}
+      {% if product.variants.size > 1 %}
+        <div class="variant-selector">
+          {% for option in product.options_with_values %}
+            <label>{{ option.name }}</label>
+            <select name="options[{{ option.name }}]">
+              {% for value in option.values %}
+                <option value="{{ value }}">{{ value }}</option>
+              {% endfor %}
+            </select>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" name="quantity" id="quantity" value="1" min="1">
+
+      <button
+        type="submit"
+        id="add-to-cart"
+        class="add-to-cart-button"
+        {% unless product.available %}
+          disabled
+        {% endunless %}
+      >
+        {% if product.available %}
+          Add to Cart
+        {% else %}
+          Sold Out
+        {% endif %}
+      </button>
+    {% endform %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('#product-form-{{ product.id }}');
+      const button = form.querySelector('.add-to-cart-button');
+      const cartCount = document.querySelector('.cart-count');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            button.textContent = 'Added to Cart';
+            updateCartCount();
+          })
+          .catch((error) => console.error('Error adding to cart:', error));
+      });
+
+      function updateCartCount() {
+        fetch('/cart.js')
+          .then((response) => response.json())
+          .then((cart) => {
+            if (cartCount) {
+              cartCount.textContent = cart.item_count;
+            }
+          });
+      }
+    });
+  </script>
+{% else %}
+  <p>Please select a product to display.</p>
+{% endif %}
