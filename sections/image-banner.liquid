@@ -1,17 +1,1734 @@
-{{ 'image-banner.css' | asset_url | stylesheet_tag }}
+{{ 'slideshow-banner.css' | asset_url | stylesheet_tag }}
 
-<div class="image-banner">
-  <div>
-    <h2>Message Text Here</h2>
+{%- style -%}
+  {%- for block in section.blocks -%}
+      {% if block.settings.sub_title_color != blank %}
+          #item-{{ block.id }} .the-sub-title {
+              --text-color: {{ block.settings.sub_title_color_mobile }};
+              --text-weight: {{ block.settings.sub_title_weight_mobile }};
+          }
+
+          #item-{{ block.id }} .the-title {
+              --text-color: {{ block.settings.main_title_color_mobile }};
+                  --text-weight: {{ block.settings.main_title_weight_mobile }};
+                  {% if block.settings.main_title_weight_mobile != '900' %}font-family: var(--heading-font-family,"Nexa");{% endif %}
+          }
+
+          #item-{{ block.id }} .the-description {
+              --text-color: {{ block.settings.description_color_mobile }};
+              --text-weight: {{ block.settings.description_weight_mobile }};
+          }
+
+          @media (min-width: 992px) {
+              #item-{{ block.id }} .the-sub-title {
+                  --text-color: {{ block.settings.sub_title_color }};
+                  --text-weight: {{ block.settings.sub_title_weight }};
+              }
+
+              #item-{{ block.id }} .the-title {
+                  --text-color: {{ block.settings.main_title_color }};
+                  --text-weight: {{ block.settings.main_title_weight }};
+                  {% if block.settings.main_title_weight != '900' %}font-family: var(--heading-font-family,"Nexa");{% endif %}
+              }
+
+              #item-{{ block.id }} .the-description {
+                  --text-color: {{ block.settings.description_color }};
+                  --text-weight: {{ block.settings.description_weight }};
+              }
+          }
+      {% endif %}
+  {%- endfor -%}
+
+  /* .slideshow-banner__text .banner-buttons .btn-shop-now {
+      background: url('{{ 'save_btn.png' | file_img_url: 'large' }}');
+      background-size: cover;
+      background-repeat: no-repeat;
+  }
+
+  .slideshow-banner__text .banner-buttons .btn-learn-more {
+      background: url('{{ 'sign_up_btn.png' | file_img_url: 'large' }}');
+      background-size: cover;
+      background-repeat: no-repeat;
+  } */
+{%- endstyle -%}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div
+        class="slideshow-banner"
+        [data-section-id="{{ section.id }}"
+        ]
+        {% if section.blocks.size > 1 %}
+          {% if section.settings.autoplay %} autoplay{% endif %}
+          {% if section.settings.autoplay_speed %}
+            data-autoplay-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
+          {%- endif %}
+          {% if section.settings.pause_on_hover %} pause-on-hover{% endif -%}
+        {% endif %}
+      >
+        <div class="slideshow-container{% if section.blocks.size > 1 %} init-slideshow{% endif %}">
+          {% for block in section.blocks %}
+            <div
+              id="item-{{ block.id }}"
+              class="slideshow-banner__slide {% if forloop.first %} is-selected {% endif %} slideshow-banner-{{ forloop.index }}"
+              {{ block.shopify_attributes }}
+            >
+              <a
+                href="{{ block.settings.learn_more_url }}"
+                class="d-block overflow-hidden slideshow-banner__{{ block.settings.slide_type }} slideshow-banner__asset border-r-lg {% if block.settings.slide_video_mobile != blank and block.settings.slide_type == 'video' %} vid_has-mobile{% endif %}"
+                {% if block.settings.slide_type == 'video' %}
+                  style="--padding: {{ 1 | divided_by: block.settings.slide_video.aspect_ratio | times: 100 }}%;"
+                {% endif %}
+              >
+                {% if block.settings.slide_type == 'image' %}
+                  {% liquid
+                    assign slide_image = block.settings.slide_image
+                    assign widths_desktop = '900,1000,1100,1200,1300,1400,1480,1600,1700,1800,1900,2000,2200,2400,2600,2800'
+                    assign image_height = slide_image.width | divided_by: slide_image.aspect_ratio
+
+                    assign slide_image_mobile = block.settings.slide_image_mobile
+                    assign widths_mobile = '300,402,503,602'
+                    assign mobile_image_height = slide_image_mobile.width | divided_by: slide_image_mobile.aspect_ratio
+                  %}
+                  {%- if block.settings.slide_image != blank and block.settings.slide_image_mobile != blank -%}
+                    <picture>
+                      <source
+                        media="(max-width: 991px)"
+                        srcset="
+                          {{ slide_image_mobile | image_url: width: 300 }} 300w,
+                          {{ slide_image_mobile | image_url: width: 402 }} 402w,
+                          {{ slide_image_mobile | image_url: width: 503 }} 503w,
+                          {{ slide_image_mobile | image_url: width: 602 }} 602w
+                        "
+                      >
+                      {{
+                        slide_image
+                        | image_url: width: slide_image.width
+                        | image_tag:
+                          width: slide_image.width,
+                          height: image_height,
+                          widths: widths_desktop,
+                          loading: 'eager',
+                          alt: slide_image.alt,
+                          preload: true
+                      }}
+                    </picture>
+                  {%- elsif block.settings.slide_image != blank and block.settings.slide_image_mobile == blank -%}
+                    {{
+                      slide_image
+                      | image_url: width: slide_image.width
+                      | image_tag:
+                        width: slide_image.width,
+                        height: image_height,
+                        widths: widths_desktop,
+                        loading: 'eager',
+                        alt: slide_image.alt,
+                        preload: true
+                    }}
+                  {%- elsif block.settings.slide_image == blank and block.settings.slide_image_mobile != blank -%}
+                    {{
+                      slide_image_mobile
+                      | image_url: width: 1024
+                      | image_tag:
+                        width: slide_image_mobile.width,
+                        height: mobile_image_height,
+                        widths: widths_mobile,
+                        loading: 'eager',
+                        alt: slide_image_mobile.alt,
+                        preload: true
+                    }}
+                  {%- endif -%}
+                {% endif %}
+
+                {% liquid
+                  assign vid_autoplay = block.settings.slideshow_video_autoplay
+                  assign vid_muted = block.settings.slideshow_video_mute
+                  assign vid_loop = true
+                  assign desktop_class = ''
+
+                  if block.settings.slide_video != blank
+                    assign desktop_class = 'hidden-phone'
+                  endif
+                %}
+
+                {% if block.settings.slide_type == 'video' and block.settings.slide_video != blank %}
+                  {%- capture id -%}
+                                        video-{{ block.settings.slide_video.id }}-{{ forloop.index }}
+                                    {%- endcapture -%}
+
+                  {%- if block.settings.slide_video != blank -%}
+                    {{
+                      block.settings.slide_video
+                      | video_tag:
+                        autoplay: vid_autoplay,
+                        loop: vid_loop,
+                        muted: vid_muted,
+                        controls: false,
+                        preload: 'none',
+                        image_size: '8000x',
+                        id: id,
+                        class: desktop_class
+                    }}
+                  {%- endif -%}
+                {% endif %}
+
+                {% if block.settings.slide_type_mobile == 'video' and block.settings.slide_video_mobile != blank %}
+                  {%- capture id_mobile -%}
+                                        video-{{ block.settings.slide_video_mobile.id }}-{{ forloop.index }}
+                                    {%- endcapture -%}
+
+                  {%- if block.settings.slide_video_mobile != blank -%}
+                    {{
+                      block.settings.slide_video_mobile
+                      | video_tag:
+                        autoplay: vid_autoplay,
+                        loop: vid_loop,
+                        muted: vid_muted,
+                        controls: false,
+                        preload: forloop.first,
+                        image_size: '4000x',
+                        id: id_mobile,
+                        class: 'hidden-tablet-and-up'
+                    }}
+                  {%- endif -%}
+                {% endif %}
+
+                {% liquid
+                  assign product_position = block.settings.product_position
+                  assign product_position_mobile = block.settings.product_position_mobile
+
+                  capture banner_product_utility
+                    echo product_position | append: ' '
+                    echo product_position_mobile | append: ' '
+                  endcapture
+                %}
+
+                {% comment %} Banner Text {% endcomment %}
+                {% if block.settings.show_banner_text %}
+                  {% liquid
+                    comment
+                      Variable: Utility class's for .slideshow-banner__text
+                    endcomment
+                    assign width_desktop = block.settings.width_desktop
+                    assign width_mobile = block.settings.width_mobile
+                    assign banner_text_position_mobile = block.settings.banner_text_position_mobile
+                    assign banner_text_position_desktop = block.settings.banner_text_position_desktop
+
+                    capture slideshow_banner_text_utility
+                      echo width_desktop | append: ' '
+                      echo width_mobile | append: ' '
+                      echo banner_text_position_mobile | append: ' '
+                      echo banner_text_position_desktop | append: ' '
+                    endcapture
+
+                    comment
+                      Variable: Utility class's for .the-sub-title
+                    endcomment
+                    assign sub_title_fontsize_desktop = block.settings.sub_title_fontsize_desktop
+                    assign sub_title_fontsize_mobile = block.settings.sub_title_fontsize_mobile
+                    assign sub_title_text_align_desktop = block.settings.sub_title_text_align_desktop
+                    assign sub_title_text_align_mobile = block.settings.sub_title_text_align_mobile
+
+                    capture sub_title_utility
+                      echo sub_title_fontsize_desktop | append: ' '
+                      echo sub_title_fontsize_mobile | append: ' '
+                      echo sub_title_text_align_desktop | append: ' '
+                      echo sub_title_text_align_mobile | append: ' '
+                    endcapture
+
+                    comment
+                      Variable: Utility class's for .the-title
+                    endcomment
+                    assign main_title_fontsize_desktop = block.settings.main_title_fontsize_desktop
+                    assign main_title_fontsize_mobile = block.settings.main_title_fontsize_mobile
+                    assign main_title_mt_desktop = block.settings.main_title_mt_desktop
+                    assign main_title_mb_desktop = block.settings.main_title_mb_desktop
+                    assign main_title_mt_mobile = block.settings.main_title_mt_mobile
+                    assign main_title_mb_mobile = block.settings.main_title_mb_mobile
+                    assign main_title_text_align_desktop = block.settings.main_title_text_align_desktop
+                    assign main_title_text_align_mobile = block.settings.main_title_text_align_mobile
+
+                    capture main_title_utility
+                      echo main_title_fontsize_desktop | append: ' '
+                      echo main_title_fontsize_mobile | append: ' '
+                      echo main_title_mt_desktop | append: ' '
+                      echo main_title_mb_desktop | append: ' '
+                      echo main_title_mt_mobile | append: ' '
+                      echo main_title_mb_mobile | append: ' '
+                      echo main_title_text_align_desktop | append: ' '
+                      echo main_title_text_align_mobile | append: ' '
+                    endcapture
+
+                    comment
+                      Variable: Utility class's for .the-description
+                    endcomment
+                    assign description_fontsize_desktop = block.settings.description_fontsize_desktop
+                    assign description_fontsize_mobile = block.settings.description_fontsize_mobile
+                    assign description_text_align_desktop = block.settings.description_text_align_desktop
+                    assign description_text_align_mobile = block.settings.description_text_align_mobile
+
+                    capture description_utility
+                      echo description_fontsize_desktop | append: ' '
+                      echo description_fontsize_mobile | append: ' '
+                      echo description_text_align_desktop | append: ' '
+                      echo description_text_align_mobile | append: ' '
+                    endcapture
+
+                    comment
+                      Variable: Utility class's for .the-buttons
+                    endcomment
+                    assign button_position_desktop = block.settings.button_position_desktop
+                    assign button_position_mobile = block.settings.button_position_mobile
+                    assign button_size_desktop = block.settings.button_size_desktop
+                    assign button_size_mobile = block.settings.button_size_mobile
+
+                    capture banner_text_button_utitity
+                      echo button_position_desktop | append: ' '
+                      echo button_position_mobile | append: ' '
+                      echo width_desktop | append: ' '
+                      echo button_size_desktop | append: ' '
+                      echo button_size_mobile | append: ''
+                    endcapture
+                  %}
+                {% endif %}
+              </a>
+              <!-- end of .slideshow-banner__type -->
+
+              <div class="slideshow-banner__text {{ slideshow_banner_text_utility | escape }}">
+                <div class="banner-title">
+                  <h3 class="the-sub-title {{ sub_title_utility | escape }}">
+                    {{ block.settings.sub_title }}
+                  </h3>
+                  <h2 class="the-title {{ main_title_utility | escape }}">
+                    {{ block.settings.main_title }}
+                  </h2>
+                  <p class="the-description {{ description_utility | escape }}">
+                    {% if block.settings.description != blank -%}
+                      <span
+                        {% if block.settings.description_mobile != blank %}
+                          class="hidden-pocket"
+                        {% endif %}
+                      >
+                        {{- block.settings.description -}}
+                      </span>
+                    {%- endif %}
+                    {% if block.settings.description_mobile != blank -%}
+                      <span class="hidden-lap-and-up">{{ block.settings.description_mobile }}</span>
+                    {%- endif %}
+                  </p>
+                </div>
+                <!-- end of .slideshow-banner__title -->
+
+                {% if block.settings.show_button %}
+                  <div class="banner-button-container">
+                    <div class="banner-buttons {{ banner_text_button_utitity | escape }} {% if block.settings.button_inverted %} button-inverted {% endif %}">
+                      {% if block.settings.shop_now_url != blank %}
+                        <a href="{{ block.settings.shop_now_url }}" class="btn btn-shop-now">
+                          {% comment %} {{ block.settings.shop_now_btn }} {% endcomment %}
+                          <img class="save_btn" src="{{ 'save_btn.png' | file_img_url: 'large' }}">
+                          <img class="save_btn_mobile" src="{{ 'save_btn_mobile.png' | file_img_url: 'large' }}">
+                        </a>
+                      {% endif %}
+                      {% comment %}
+                        {% if block.settings.learn_more_url != blank %}
+                            <a href="{{ block.settings.learn_more_url }}" class="btn btn-learn-more">
+                                {% comment %} {{ block.settings.learn_more_btn }} {% endcomment %}
+                                <img src="{{ 'sign_up_btn.png' | file_img_url: 'large' }}">
+                            </a>
+                        {% endif %}
+                      {% endcomment %}
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if block.settings.slide_type == 'video' and block.settings.slide_video != blank %}
+                <button
+                  class="video-control slideshow-play-pause {% if block.settings.slide_video_mobile != blank %} hidden-phone {% endif %} {% if block.settings.video_button_position %} {{ block.settings.video_button_position }} {% endif %}"
+                  data-video="slideshow-video-{{ forloop.index }}"
+                  aria-controls="{{ id }}"
+                  data-action="toggle-video"
+                  aria-label="{% if vid_autoplay %}Pause{% else %}Play{% endif %}"
+                >
+                  {% render 'icon', icon: 'vid-pause-btn' %}
+                  {% render 'icon', icon: 'vid-play-btn' %}
+                </button>
+              {% endif %}
+
+              {% if block.settings.slide_type_mobile == 'video' and block.settings.slide_video_mobile != blank %}
+                <button
+                  class="video-control slideshow-play-pause hidden-tablet-and-up {% if block.settings.video_button_position %} {{ block.settings.video_button_position }} {% endif %}"
+                  data-video="slideshow-video-{{ forloop.index }}"
+                  aria-controls="{{ id_mobile }}"
+                  data-action="toggle-video"
+                  aria-label="{% if vid_autoplay %}Pause{% else %}Play{% endif %}"
+                >
+                  {% render 'icon', icon: 'vid-pause-btn' %}
+                  {% render 'icon', icon: 'vid-play-btn' %}
+                </button>
+              {% endif %}
+
+              {% if block.settings.featured_product != blank %}
+                {% assign product = all_products[block.settings.featured_product] %}
+                <div class="slideshow-banner__product slideshow-product-{{ forloop.index }} {{ banner_product_utility | escape }} {% if block.settings.hide_product_mobile %} hide-product-m {% endif %} border-r-md">
+                  <a href="{{ product.url }}" class="product-link">
+                    <div class="image-card">
+                      <div class="image-card--wrapper">
+                        {% if product.featured_media != blank %}
+                          {{ product.featured_media | media_tag: image_size: '400x' }}
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="product-card">
+                      <h6 class="title">{{ product.title }}</h6>
+                      <span class="price">{{ product.price | money }}</span>
+                      <a href="{{ product.url }}" class="link">{{ block.settings.featured_product_label }}</a>
+                    </div>
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+            <!-- end of .slideshow-banner__slide -->
+          {% endfor %}
+        </div>
+        <!-- end of .slideshow-container -->
+
+        {% if section.blocks.size > 1 %}
+          <div class="slideshow-banner__nav chevron-left">
+            <button class="slideshow-banner__nav-button nav-button--prev" aria-label="Previous slide">
+              {% render 'icon', icon: 'chevron-left' %}
+            </button>
+          </div>
+
+          <div class="slideshow-banner__nav chevron-right">
+            <button class="slideshow-banner__nav-button nav-button--next" aria-label="Next slide">
+              {% render 'icon', icon: 'chevron-right' %}
+            </button>
+          </div>
+
+          <ul class="flickity-page-dots slideshow-banner__dots"></ul>
+        {% endif %}
+      </div>
+      <!-- end of .slideshow-banner -->
+    </div>
+    <!-- end of .col-12 -->
   </div>
+  <!-- end of .row -->
 </div>
+<!-- end of .container-fluid -->
+
+<script src="{{ 'slideshow-banner.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
-  "name": "Image banner",
+  "name": "Image Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner Title Settings"
+    },
+    {
+      "type": "header",
+      "content": "Sub Title Settings"
+    },
+    {
+      "type": "header",
+      "content": "Slider Configutation"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay Slider",
+      "info": "Only works for 2 or more slider components",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "info": "Pause autoplay on Hover",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "SLIDE TYPE"
+        },
+        {
+          "type": "radio",
+          "id": "slide_type",
+          "label": "Slide Type",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "radio",
+          "id": "slide_type_mobile",
+          "label": "Slide Type Mobile",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "video",
+              "label": "Video"
+            }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "header",
+          "content": "IMAGE"
+        },
+        {
+          "type": "image_picker",
+          "id": "slide_image",
+          "label": "Slide Image(Desktop)",
+          "info": "1400x530"
+        },
+        {
+          "type": "image_picker",
+          "id": "slide_image_mobile",
+          "label": "Slide Image(Mobile)"
+        },
+        {
+          "type": "header",
+          "content": "VIDEO"
+        },
+        {
+          "type": "video",
+          "id": "slide_video",
+          "label": "Select a Video(Desktop)",
+          "info": "1400x530"
+        },
+        {
+          "type": "video",
+          "id": "slide_video_mobile",
+          "label": "Select a Video(Mobile)"
+        },
+        {
+          "type": "select",
+          "id": "video_button_position",
+          "label": "Play/Pause Position",
+          "options": [
+            {
+              "value": "top-right",
+              "label": "Top Right"
+            },
+            {
+              "value": "top-left",
+              "label": "Top Left"
+            },
+            {
+              "value": "bottom-right",
+              "label": "Bottom Right"
+            },
+            {
+              "value": "bottom-left",
+              "label": "Bottom Left"
+            }
+          ],
+          "default": "bottom-right"
+        },
+        {
+          "type": "checkbox",
+          "id": "slideshow_video_autoplay",
+          "label": "Autoplay Video",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "slideshow_video_mute",
+          "label": "Mute Video",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "BANNER TEXT SETTINGS"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_banner_text",
+          "label": "Show Banner Text",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Desktop Settings"
+        },
+        {
+          "type": "select",
+          "id": "width_desktop",
+          "label": "Banner Text Wrapper Width Size (Desktop)",
+          "options": [
+            {
+              "value": "width-small-d",
+              "label": "Small (40%)"
+            },
+            {
+              "value": "width-medium-d",
+              "label": "Medium (70%)"
+            },
+            {
+              "value": "width-large-d",
+              "label": "Full-width (90%)"
+            }
+          ],
+          "default": "width-medium-d"
+        },
+        {
+          "type": "select",
+          "id": "banner_text_position_desktop",
+          "label": "Banner Text Position (Desktop)",
+          "options": [
+            {
+              "value": "top-right-d",
+              "label": "Top Right"
+            },
+            {
+              "value": "top-left-d",
+              "label": "Top Left"
+            },
+            {
+              "value": "bottom-right-d",
+              "label": "Bottom Right"
+            },
+            {
+              "value": "bottom-left-d",
+              "label": "Bottom Left"
+            },
+            {
+              "value": "top-d",
+              "label": "Top"
+            },
+            {
+              "value": "center-d",
+              "label": "Center"
+            },
+            {
+              "value": "bottom-d",
+              "label": "Bottom"
+            },
+            {
+              "value": "left-d",
+              "label": "Left"
+            },
+            {
+              "value": "right-d",
+              "label": "Right"
+            }
+          ],
+          "default": "center-d"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Settings"
+        },
+        {
+          "type": "select",
+          "id": "width_mobile",
+          "label": "Banner Text Wrapper Width Size (Mobile)",
+          "options": [
+            {
+              "value": "width-small-m",
+              "label": "Small (45%)"
+            },
+            {
+              "value": "width-medium-m",
+              "label": "Medium (75%)"
+            },
+            {
+              "value": "width-large-m",
+              "label": "Full-width (95%)"
+            }
+          ],
+          "default": "width-medium-m"
+        },
+        {
+          "type": "select",
+          "id": "banner_text_position_mobile",
+          "label": "Banner Text Position (Mobile)",
+          "options": [
+            {
+              "value": "top-right-m",
+              "label": "Top Right"
+            },
+            {
+              "value": "top-left-m",
+              "label": "Top Left"
+            },
+            {
+              "value": "bottom-right-m",
+              "label": "Bottom Right"
+            },
+            {
+              "value": "bottom-left-m",
+              "label": "Bottom Left"
+            },
+            {
+              "value": "top-m",
+              "label": "Top"
+            },
+            {
+              "value": "center-m",
+              "label": "Center"
+            },
+            {
+              "value": "bottom-m",
+              "label": "Bottom"
+            }
+          ],
+          "default": "center-m"
+        },
+        {
+          "type": "header",
+          "content": "SUB TITLE"
+        },
+        {
+          "type": "text",
+          "id": "sub_title",
+          "label": "Sub Title",
+          "default": "Sub Title"
+        },
+        {
+          "type": "header",
+          "content": "Desktop Settings"
+        },
+        {
+          "type": "select",
+          "id": "sub_title_fontsize_desktop",
+          "label": "Font Size (Desktop)",
+          "options": [
+            {
+              "value": "font-xxsmall-d",
+              "label": "XX-Small (14px)"
+            },
+            {
+              "value": "font-xsmall-d",
+              "label": "X-Small (16px)"
+            },
+            {
+              "value": "font-small-d",
+              "label": "Small (18px)"
+            },
+            {
+              "value": "font-medium-d",
+              "label": "Medium (20px)"
+            },
+            {
+              "value": "font-large-d",
+              "label": "Large (22px)"
+            },
+            {
+              "value": "font-xlarge-d",
+              "label": "X-Large (24px)"
+            },
+            {
+              "value": "font-2xlarge-d",
+              "label": "2XL-Large (26px)"
+            },
+            {
+              "value": "font-3xlarge-d",
+              "label": "3XL-Large (28px)"
+            },
+            {
+              "value": "font-4xlarge-d",
+              "label": "4XL-Large (32px)"
+            },
+            {
+              "value": "font-5xlarge-d",
+              "label": "5XL-Large (36px)"
+            },
+            {
+              "value": "font-6xlarge-d",
+              "label": "6XL-Large (40px)"
+            }
+          ],
+          "default": "font-small-d"
+        },
+        {
+          "type": "select",
+          "id": "sub_title_text_align_desktop",
+          "label": "Sub Title Text Alignment (Desktop)",
+          "options": [
+            {
+              "value": "text-left-d",
+              "label": "Left"
+            },
+            {
+              "value": "text-center-d",
+              "label": "Center"
+            },
+            {
+              "value": "text-right-d",
+              "label": "Right"
+            }
+          ],
+          "default": "text-center-d"
+        },
+        {
+          "type": "color",
+          "id": "sub_title_color",
+          "label": "Sub Title Color (Desktop)",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "sub_title_weight",
+          "label": "Sub Title Font Weight",
+          "options": [
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Normal"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Settings"
+        },
+        {
+          "type": "select",
+          "id": "sub_title_fontsize_mobile",
+          "label": "Font Size (Mobile)",
+          "options": [
+            {
+              "value": "font-xxsmall-m",
+              "label": "XX-Small (14px)"
+            },
+            {
+              "value": "font-xsmall-m",
+              "label": "X-Small (16px)"
+            },
+            {
+              "value": "font-small-m",
+              "label": "Small (18px)"
+            },
+            {
+              "value": "font-medium-m",
+              "label": "Medium (20px)"
+            },
+            {
+              "value": "font-large-m",
+              "label": "Large (22px)"
+            },
+            {
+              "value": "font-xlarge-m",
+              "label": "X-Large (24px)"
+            },
+            {
+              "value": "font-2xlarge-m",
+              "label": "2X-Large (26px)"
+            },
+            {
+              "value": "font-3xlarge-m",
+              "label": "3X-Large (28px)"
+            },
+            {
+              "value": "font-4xlarge-m",
+              "label": "4X-Large (30px)"
+            },
+            {
+              "value": "font-5xlarge-m",
+              "label": "5X-Large (32px)"
+            },
+            {
+              "value": "font-6xlarge-m",
+              "label": "6X-Large (34px)"
+            }
+          ],
+          "default": "font-small-m"
+        },
+        {
+          "type": "select",
+          "id": "sub_title_text_align_mobile",
+          "label": "Sub Title Text Alignment (Mobile)",
+          "options": [
+            {
+              "value": "text-left-m",
+              "label": "Left"
+            },
+            {
+              "value": "text-center-m",
+              "label": "Center"
+            },
+            {
+              "value": "text-right-m",
+              "label": "Right"
+            }
+          ],
+          "default": "text-center-m"
+        },
+        {
+          "type": "color",
+          "id": "sub_title_color_mobile",
+          "label": "Sub Title Color (Mobile)",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "sub_title_weight_mobile",
+          "label": "Sub Title Font Weight Mobile",
+          "options": [
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Normal"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "header",
+          "content": "TITLE"
+        },
+        {
+          "type": "text",
+          "id": "main_title",
+          "label": "Main Title",
+          "default": "Slide Title"
+        },
+        {
+          "type": "header",
+          "content": "Desktop Settings"
+        },
+        {
+          "type": "select",
+          "id": "main_title_fontsize_desktop",
+          "label": "Font Size (Desktop)",
+          "options": [
+            {
+              "value": "font-xxsmall-d",
+              "label": "XX-Small (14px)"
+            },
+            {
+              "value": "font-xsmall-d",
+              "label": "X-Small (18px)"
+            },
+            {
+              "value": "font-small-d",
+              "label": "Small (22px)"
+            },
+            {
+              "value": "font-medium-d",
+              "label": "Medium (26px)"
+            },
+            {
+              "value": "font-large-d",
+              "label": "Large (30px)"
+            },
+            {
+              "value": "font-xlarge-d",
+              "label": "X-Large (34px)"
+            },
+            {
+              "value": "font-2xlarge-d",
+              "label": "2X-Large (38px)"
+            },
+            {
+              "value": "font-3xlarge-d",
+              "label": "3X-Large (42px)"
+            },
+            {
+              "value": "font-4xlarge-d",
+              "label": "4X-Large (46px)"
+            },
+            {
+              "value": "font-5xlarge-d",
+              "label": "5X-Large (50px)"
+            },
+            {
+              "value": "font-6xlarge-d",
+              "label": "6X-Large (54px)"
+            },
+            {
+              "value": "font-7xlarge-d",
+              "label": "7X-Large (58px)"
+            },
+            {
+              "value": "font-8xlarge-d",
+              "label": "8X-Large (62px)"
+            }
+          ],
+          "default": "font-4xlarge-d"
+        },
+        {
+          "type": "select",
+          "id": "main_title_mt_desktop",
+          "label": "Margin Top (Desktop)",
+          "options": [
+            {
+              "value": "mt-xsmall-d",
+              "label": "None"
+            },
+            {
+              "value": "mt-small-d",
+              "label": "Small (5px)"
+            },
+            {
+              "value": "mt-medium-d",
+              "label": "Medium (10px)"
+            },
+            {
+              "value": "mt-large-d",
+              "label": "Large (15px)"
+            },
+            {
+              "value": "mt-xlarge-d",
+              "label": "X-Large (20px)"
+            },
+            {
+              "value": "mt-2xlarge-d",
+              "label": "2X-Large (25px)"
+            },
+            {
+              "value": "mt-3xlarge-d",
+              "label": "3X-Large (30px)"
+            },
+            {
+              "value": "mt-4xlarge-d",
+              "label": "4X-Large (35px)"
+            },
+            {
+              "value": "mt-5xlarge-d",
+              "label": "5X-Large (40px)"
+            }
+          ],
+          "default": "mt-medium-d"
+        },
+        {
+          "type": "select",
+          "id": "main_title_mb_desktop",
+          "label": "Margin Bottom (Desktop)",
+          "options": [
+            {
+              "value": "mb-xsmall-d",
+              "label": "None"
+            },
+            {
+              "value": "mb-small-d",
+              "label": "Small (5px)"
+            },
+            {
+              "value": "mb-medium-d",
+              "label": "Medium (10px)"
+            },
+            {
+              "value": "mb-large-d",
+              "label": "Large (15px)"
+            },
+            {
+              "value": "mb-xlarge-d",
+              "label": "X-Large (20px)"
+            },
+            {
+              "value": "mb-2xlarge-d",
+              "label": "2X-Large (25px)"
+            },
+            {
+              "value": "mb-3xlarge-d",
+              "label": "3X-Large (30px)"
+            },
+            {
+              "value": "mb-4xlarge-d",
+              "label": "4X-Large (35px)"
+            },
+            {
+              "value": "mb-5xlarge-d",
+              "label": "5X-Large (40px)"
+            }
+          ],
+          "default": "mb-medium-d"
+        },
+        {
+          "type": "select",
+          "id": "main_title_text_align_desktop",
+          "label": "Main Title Text Alignment (Desktop)",
+          "options": [
+            {
+              "value": "text-left-d",
+              "label": "Left"
+            },
+            {
+              "value": "text-center-d",
+              "label": "Center"
+            },
+            {
+              "value": "text-right-d",
+              "label": "Right"
+            }
+          ],
+          "default": "text-center-d"
+        },
+        {
+          "type": "color",
+          "id": "main_title_color",
+          "label": "Main Title Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "main_title_weight",
+          "label": "Main Title Font Weight",
+          "options": [
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Normal"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ],
+          "default": "900"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Settings"
+        },
+        {
+          "type": "select",
+          "id": "main_title_fontsize_mobile",
+          "label": "Font Size (Mobile)",
+          "options": [
+            {
+              "value": "font-xxsmall-m",
+              "label": "XX-Small (14px)"
+            },
+            {
+              "value": "font-xsmall-m",
+              "label": "X-Small (18px)"
+            },
+            {
+              "value": "font-small-m",
+              "label": "Small (22px)"
+            },
+            {
+              "value": "font-medium-m",
+              "label": "Medium (26px)"
+            },
+            {
+              "value": "font-large-m",
+              "label": "Large (30px)"
+            },
+            {
+              "value": "font-xlarge-m",
+              "label": "X-Large (34px)"
+            },
+            {
+              "value": "font-2xlarge-m",
+              "label": "2X-Large (38px)"
+            },
+            {
+              "value": "font-3xlarge-m",
+              "label": "3X-Large (42px)"
+            },
+            {
+              "value": "font-4xlarge-m",
+              "label": "4X-Large (46px)"
+            }
+          ],
+          "default": "font-large-m"
+        },
+        {
+          "type": "select",
+          "id": "main_title_mt_mobile",
+          "label": "Margin Top (Mobile)",
+          "options": [
+            {
+              "value": "mt-xsmall-m",
+              "label": "None"
+            },
+            {
+              "value": "mt-small-m",
+              "label": "Small (5px)"
+            },
+            {
+              "value": "mt-medium-m",
+              "label": "Medium (10px)"
+            },
+            {
+              "value": "mt-large-m",
+              "label": "Large (15px)"
+            },
+            {
+              "value": "mt-xlarge-m",
+              "label": "X-Large (20px)"
+            },
+            {
+              "value": "mt-2xlarge-m",
+              "label": "2X-Large (25px)"
+            },
+            {
+              "value": "mt-3xlarge-m",
+              "label": "3X-Large (30px)"
+            },
+            {
+              "value": "mt-4xlarge-m",
+              "label": "4X-Large (35px)"
+            },
+            {
+              "value": "mt-5xlarge-m",
+              "label": "5X-Large (40px)"
+            }
+          ],
+          "default": "mt-small-m"
+        },
+        {
+          "type": "select",
+          "id": "main_title_mb_mobile",
+          "label": "Margin Bottom (Mobile)",
+          "options": [
+            {
+              "value": "mb-xsmall-m",
+              "label": "None"
+            },
+            {
+              "value": "mb-small-m",
+              "label": "Small (5px)"
+            },
+            {
+              "value": "mb-medium-m",
+              "label": "Medium (10px)"
+            },
+            {
+              "value": "mb-large-m",
+              "label": "Large (15px)"
+            },
+            {
+              "value": "mb-xlarge-m",
+              "label": "X-Large (20px)"
+            },
+            {
+              "value": "mb-2xlarge-m",
+              "label": "2X-Large (25px)"
+            },
+            {
+              "value": "mb-3xlarge-m",
+              "label": "3X-Large (30px)"
+            },
+            {
+              "value": "mb-4xlarge-m",
+              "label": "4X-Large (35px)"
+            },
+            {
+              "value": "mb-5xlarge-m",
+              "label": "5X-Large (40px)"
+            }
+          ],
+          "default": "mb-small-m"
+        },
+        {
+          "type": "select",
+          "id": "main_title_text_align_mobile",
+          "label": "Main Title Text Alignment (Mobile)",
+          "options": [
+            {
+              "value": "text-left-m",
+              "label": "Left"
+            },
+            {
+              "value": "text-center-m",
+              "label": "Center"
+            },
+            {
+              "value": "text-right-m",
+              "label": "Right"
+            }
+          ],
+          "default": "text-center-m"
+        },
+        {
+          "type": "color",
+          "id": "main_title_color_mobile",
+          "label": "Main Title Color (Mobile)",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "main_title_weight_mobile",
+          "label": "Main Title Font Weight (Mobile)",
+          "options": [
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Normal"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ],
+          "default": "900"
+        },
+        {
+          "type": "header",
+          "content": "DESCRIPTION"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Slide Description"
+        },
+        {
+          "type": "liquid",
+          "id": "description_mobile",
+          "label": "Description Mobile",
+          "default": "SAVE BIG ON TOP BRANDS<br/>& BEST STYLES"
+        },
+        {
+          "type": "header",
+          "content": "Desktop Settings"
+        },
+        {
+          "type": "select",
+          "id": "description_fontsize_desktop",
+          "label": "Font Size (Desktop)",
+          "options": [
+            {
+              "value": "font-xxsmall-d",
+              "label": "XX-Small (14px)"
+            },
+            {
+              "value": "font-xsmall-d",
+              "label": "X-Small (16px)"
+            },
+            {
+              "value": "font-small-d",
+              "label": "Small (18px)"
+            },
+            {
+              "value": "font-medium-d",
+              "label": "Medium (20px)"
+            },
+            {
+              "value": "font-large-d",
+              "label": "Large (22px)"
+            },
+            {
+              "value": "font-xlarge-d",
+              "label": "X-Large (24px)"
+            },
+            {
+              "value": "font-2xlarge-d",
+              "label": "2XL-Large (26px)"
+            },
+            {
+              "value": "font-3xlarge-d",
+              "label": "3XL-Large (28px)"
+            },
+            {
+              "value": "font-4xlarge-d",
+              "label": "4XL-Large (32px)"
+            },
+            {
+              "value": "font-5xlarge-d",
+              "label": "5XL-Large (36px)"
+            },
+            {
+              "value": "font-6xlarge-d",
+              "label": "6XL-Large (40px)"
+            }
+          ],
+          "default": "font-small-d"
+        },
+        {
+          "type": "select",
+          "id": "description_text_align_desktop",
+          "label": "Sub Title Text Alignment (Desktop)",
+          "options": [
+            {
+              "value": "text-left-d",
+              "label": "Left"
+            },
+            {
+              "value": "text-center-d",
+              "label": "Center"
+            },
+            {
+              "value": "text-right-d",
+              "label": "Right"
+            }
+          ],
+          "default": "text-center-d"
+        },
+        {
+          "type": "color",
+          "id": "description_color",
+          "label": "Description Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "description_weight",
+          "label": "Description Font Weight",
+          "options": [
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Normal"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Settings"
+        },
+        {
+          "type": "select",
+          "id": "description_fontsize_mobile",
+          "label": "Font Size (Mobile)",
+          "options": [
+            {
+              "value": "font-xxsmall-m",
+              "label": "XX-Small (14px)"
+            },
+            {
+              "value": "font-xsmall-m",
+              "label": "X-Small (16px)"
+            },
+            {
+              "value": "font-small-m",
+              "label": "Small (18px)"
+            },
+            {
+              "value": "font-medium-m",
+              "label": "Medium (20px)"
+            },
+            {
+              "value": "font-large-m",
+              "label": "Large (22px)"
+            },
+            {
+              "value": "font-xlarge-m",
+              "label": "X-Large (24px)"
+            },
+            {
+              "value": "font-2xlarge-m",
+              "label": "2X-Large (26px)"
+            },
+            {
+              "value": "font-3xlarge-m",
+              "label": "3X-Large (28px)"
+            },
+            {
+              "value": "font-4xlarge-m",
+              "label": "4X-Large (30px)"
+            },
+            {
+              "value": "font-5xlarge-m",
+              "label": "5X-Large (32px)"
+            },
+            {
+              "value": "font-6xlarge-m",
+              "label": "6X-Large (34px)"
+            }
+          ],
+          "default": "font-2xlarge-m"
+        },
+        {
+          "type": "select",
+          "id": "description_text_align_mobile",
+          "label": "Sub Title Text Alignment (Mobile)",
+          "options": [
+            {
+              "value": "text-left-m",
+              "label": "Left"
+            },
+            {
+              "value": "text-center-m",
+              "label": "Center"
+            },
+            {
+              "value": "text-right-m",
+              "label": "Right"
+            }
+          ],
+          "default": "text-center-m"
+        },
+        {
+          "type": "color",
+          "id": "description_color_mobile",
+          "label": "Description Color Mobile",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "description_weight_mobile",
+          "label": "Description Font Weight Mobile",
+          "options": [
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Normal"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "header",
+          "content": "BUTTON SETTINGS"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_button",
+          "label": "Show Button",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "button_inverted",
+          "label": "Invert Button Color",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Desktop Settings"
+        },
+        {
+          "type": "select",
+          "id": "button_position_desktop",
+          "label": "Button Position (Desktop)",
+          "options": [
+            {
+              "value": "left-d",
+              "label": "Left"
+            },
+            {
+              "value": "center-d",
+              "label": "Center"
+            },
+            {
+              "value": "right-d",
+              "label": "Right"
+            }
+          ],
+          "default": "center-d"
+        },
+        {
+          "type": "select",
+          "id": "button_size_desktop",
+          "label": "Button Size (Desktop)",
+          "options": [
+            {
+              "value": "small-d",
+              "label": "Small"
+            },
+            {
+              "value": "medium-d",
+              "label": "Medium"
+            },
+            {
+              "value": "large-d",
+              "label": "Large"
+            }
+          ],
+          "default": "medium-d"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Settings"
+        },
+        {
+          "type": "select",
+          "id": "button_position_mobile",
+          "label": "Button Position (Mobile)",
+          "options": [
+            {
+              "value": "left-m",
+              "label": "Left"
+            },
+            {
+              "value": "center-m",
+              "label": "Center"
+            },
+            {
+              "value": "right-m",
+              "label": "Right"
+            }
+          ],
+          "default": "center-m"
+        },
+        {
+          "type": "select",
+          "id": "button_size_mobile",
+          "label": "Button Size (Mobile)",
+          "options": [
+            {
+              "value": "small-m",
+              "label": "Small"
+            },
+            {
+              "value": "medium-m",
+              "label": "Medium"
+            },
+            {
+              "value": "large-m",
+              "label": "Large"
+            }
+          ],
+          "default": "small-m"
+        },
+        {
+          "type": "header",
+          "content": "Buttons"
+        },
+        {
+          "type": "url",
+          "id": "shop_now_url",
+          "label": "Shop Now URL"
+        },
+        {
+          "type": "text",
+          "id": "shop_now_btn",
+          "label": "Shop Now Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "learn_more_url",
+          "label": "Learn More URL"
+        },
+        {
+          "type": "text",
+          "id": "learn_more_btn",
+          "label": "Learn More Button Label",
+          "default": "Learn More"
+        },
+        {
+          "type": "header",
+          "content": "FEATURED PRODUCT"
+        },
+        {
+          "type": "product",
+          "id": "featured_product",
+          "label": "Product"
+        },
+        {
+          "type": "header",
+          "content": "Desktop Settings"
+        },
+        {
+          "type": "select",
+          "id": "product_position",
+          "label": "Product Position Desktop",
+          "options": [
+            {
+              "value": "bottom-left-d",
+              "label": "Bottom Left"
+            },
+            {
+              "value": "bottom-right-d",
+              "label": "Bottom Right"
+            },
+            {
+              "value": "top-left-d",
+              "label": "Top Left"
+            },
+            {
+              "value": "top-right-d",
+              "label": "Top Right"
+            }
+          ],
+          "default": "bottom-right-d"
+        },
+        {
+          "type": "header",
+          "content": "Mobile Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_product_mobile",
+          "label": "Hide Featured Product (Mobile)",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "featured_product_label",
+          "label": "Shop Now",
+          "default": "Shop Now"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Image banner"
+      "name": "Image Banner",
+      "category": "Slideshow"
     }
   ]
 }
