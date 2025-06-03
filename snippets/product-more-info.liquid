@@ -2,9 +2,14 @@
 
 <div class="product-accordion">
   {% if product.metafields.custom.material %}
-    <div class="accordion-item">
-      <button class="accordion-toggle" type="button" aria-expanded="false">Material</button>
-      <div class="accordion-content" hidden>
+    <div class="accordion-item active">
+      <button class="accordion-toggle" aria-expanded="true">
+        <span>Material</span>
+        <svg class="icon" viewBox="0 0 20 20">
+          <path d="M5 7l5 5 5-5"></path>
+        </svg>
+      </button>
+      <div class="accordion-content" style="max-height: 200px;">
         {{ product.metafields.custom.material | metafield_tag }}
       </div>
     </div>
@@ -12,8 +17,13 @@
 
   {% if product.metafields.custom.delivery %}
     <div class="accordion-item">
-      <button class="accordion-toggle" type="button" aria-expanded="false">Delivery</button>
-      <div class="accordion-content" hidden>
+      <button class="accordion-toggle" aria-expanded="false">
+        <span>Delivery</span>
+        <svg class="icon" viewBox="0 0 20 20">
+          <path d="M5 7l5 5 5-5"></path>
+        </svg>
+      </button>
+      <div class="accordion-content">
         {{ product.metafields.custom.delivery | metafield_tag }}
       </div>
     </div>
@@ -22,12 +32,35 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.accordion-toggle').forEach((button) => {
-      button.addEventListener('click', () => {
-        const content = button.nextElementSibling;
-        const expanded = button.getAttribute('aria-expanded') === 'true';
-        button.setAttribute('aria-expanded', !expanded);
-        content.hidden = expanded;
+    const accordionItems = document.querySelectorAll('.accordion-item');
+
+    accordionItems.forEach((item, index) => {
+      const toggle = item.querySelector('.accordion-toggle');
+      const content = item.querySelector('.accordion-content');
+
+      // Open the first item
+      if (index === 0) {
+        item.classList.add('active');
+        toggle.setAttribute('aria-expanded', 'true');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+
+      toggle.addEventListener('click', () => {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+        // Collapse all
+        accordionItems.forEach((i) => {
+          i.classList.remove('active');
+          i.querySelector('.accordion-toggle').setAttribute('aria-expanded', 'false');
+          i.querySelector('.accordion-content').style.maxHeight = null;
+        });
+
+        // Expand clicked
+        if (!isExpanded) {
+          item.classList.add('active');
+          toggle.setAttribute('aria-expanded', 'true');
+          content.style.maxHeight = content.scrollHeight + 'px';
+        }
       });
     });
   });
