@@ -74,6 +74,7 @@
 
           <label for="quantity">Quantity:</label>
           <input type="number" name="quantity" id="quantity" value="1" min="1">
+          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
 
           <button
             type="submit"
@@ -100,7 +101,6 @@
     document.addEventListener('DOMContentLoaded', function () {
       const form = document.querySelector('#product-form-{{ product.id }}');
       const button = form.querySelector('.add-to-cart-button');
-      const cartCount = document.querySelector('.cart-count');
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -111,7 +111,12 @@
           headers: { Accept: 'application/json' },
           body: formData,
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Failed to add to cart');
+            }
+            return response.json();
+          })
           .then((data) => {
             button.textContent = 'Added to Cart';
             updateCartCount();
@@ -121,24 +126,25 @@
 
       function updateCartCount() {
         fetch('/cart.js')
-        .then(res => res.json())
-        .then(cart => {
+          .then((res) => res.json())
+          .then((cart) => {
             const count = cart.item_count;
             const bubble = document.querySelector('.cart-count-bubble');
 
             if (bubble) {
-            bubble.innerHTML = '<span aria-hidden="true">${count}</span>';
+              bubble.innerHTML = '<span aria-hidden="true">${count}</span>';
             } else {
-            const newBubble = document.createElement('div');
-            newBubble.className = 'cart-count-bubble';
-            newBubble.innerHTML = '<span aria-hidden="true">${count}</span>';
-            document.getElementById('cart-icon-bubble').appendChild(newBubble);
+              const newBubble = document.createElement('div');
+              newBubble.className = 'cart-count-bubble';
+              newBubble.innerHTML = '<span aria-hidden="true">${count}</span>';
+              document.getElementById('cart-icon-bubble').appendChild(newBubble);
             }
-        })
-        .catch(err => console.error('Cart count update error:', err));
-
+          })
+          .catch((err) => console.error('Cart count update error:', err));
+      }
     });
   </script>
+
 {% else %}
   <p>Please select a product to display.</p>
 {% endif %}
