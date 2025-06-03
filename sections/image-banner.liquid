@@ -191,13 +191,8 @@
                     echo product_position_mobile | append: ' '
                   endcapture
                 %}
-
-                {% comment %} Banner Text {% endcomment %}
                 {% if block.settings.show_banner_text %}
                   {% liquid
-                    comment
-                      Variable: Utility class's for .slideshow-banner__text
-                    endcomment
                     assign width_desktop = block.settings.width_desktop
                     assign width_mobile = block.settings.width_mobile
                     assign banner_text_position_mobile = block.settings.banner_text_position_mobile
@@ -210,9 +205,6 @@
                       echo banner_text_position_desktop | append: ' '
                     endcapture
 
-                    comment
-                      Variable: Utility class's for .the-sub-title
-                    endcomment
                     assign sub_title_fontsize_desktop = block.settings.sub_title_fontsize_desktop
                     assign sub_title_fontsize_mobile = block.settings.sub_title_fontsize_mobile
                     assign sub_title_text_align_desktop = block.settings.sub_title_text_align_desktop
@@ -225,9 +217,6 @@
                       echo sub_title_text_align_mobile | append: ' '
                     endcapture
 
-                    comment
-                      Variable: Utility class's for .the-title
-                    endcomment
                     assign main_title_fontsize_desktop = block.settings.main_title_fontsize_desktop
                     assign main_title_fontsize_mobile = block.settings.main_title_fontsize_mobile
                     assign main_title_mt_desktop = block.settings.main_title_mt_desktop
@@ -248,9 +237,6 @@
                       echo main_title_text_align_mobile | append: ' '
                     endcapture
 
-                    comment
-                      Variable: Utility class's for .the-description
-                    endcomment
                     assign description_fontsize_desktop = block.settings.description_fontsize_desktop
                     assign description_fontsize_mobile = block.settings.description_fontsize_mobile
                     assign description_text_align_desktop = block.settings.description_text_align_desktop
@@ -263,9 +249,6 @@
                       echo description_text_align_mobile | append: ' '
                     endcapture
 
-                    comment
-                      Variable: Utility class's for .the-buttons
-                    endcomment
                     assign button_position_desktop = block.settings.button_position_desktop
                     assign button_position_mobile = block.settings.button_position_mobile
                     assign button_size_desktop = block.settings.button_size_desktop
