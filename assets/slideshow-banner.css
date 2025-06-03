@@ -2,17 +2,6 @@
     z-index: 1;
     position: relative;
     overflow: hidden;
-    /*
-    - Remove or delete the width in &__product
-    - Use this to indipendently control the width of the product in slideshow
-    .slideshow-product-1 {
-        width: auto;
-    }
-  
-    .slideshow-product-2 {
-        width: auto;
-    }
-    */
   }
   .slideshow-banner[data-transition=slide] .slideshow-banner__slide {
     display: flex;
@@ -118,12 +107,7 @@
     -o-object-fit: cover;
        object-fit: cover;
     display: block;
-    border-radius: 0.875rem;
-  }
-  @media (min-width: 992px) {
-    .slideshow-banner__image img {
-      border-radius: 1rem;
-    }
+    max-height: 471px;
   }
   @media (max-width: 991.98px) {
     .slideshow-banner__image .slideshow-banner__asset-desktop {
@@ -168,19 +152,6 @@
     flex-direction: column;
     color: var(--white, #fff);
     height: auto;
-    top: 45%;
-    width: 50%;
-    left: 16%;
-    /*
-        - Banner Text Container Position
-        - Value is from Customizer
-        - (d fo Desktop)
-     */
-    /*
-        - Banner Text Container Position
-        - Value is from Customizer
-        - (d fo Mobile)
-     */
   }
   @media (max-width: 991.98px) {
     .slideshow-banner__text {
@@ -200,46 +171,6 @@
     text-transform: uppercase;
     color: var(--text-color, #ffffff);
     font-weight: var(--text-weight);
-    /*
-        - Font Size Option for Main Title in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
-    /*
-        - Font Size Option for Main Title in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
-    /*
-        - Margin Top Option for Main title in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
-    /*
-        - Margin Bottom Option for Main title in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
-    /*
-        - Margin Top Option for Main title in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
-    /*
-        - Margin Bottom Option for Main title in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
-    /*
-        - Text Alignment option for Main Title in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
-    /*
-        - Text Alignment option for Main Title in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
   }
   @media (max-width: 991.98px) {
     .slideshow-banner__text .banner-title .the-title.font-xxsmall-m {
@@ -593,26 +524,7 @@
     margin-bottom: 0;
     color: var(--text-color, #fff);
     font-weight: var(--text-weight);
-    /*
-        - Font size option for sub title in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
-    /*
-        - Font size option for sub title in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
-    /*
-        - Text Alignment option for sub title in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
-    /*
-        - Text Alignment option for sub title in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
+    text-transform: uppercase; 
   }
   @media (max-width: 991.98px) {
     .slideshow-banner__text .banner-title .the-sub-title.font-xxsmall-m {
@@ -779,26 +691,6 @@
   .slideshow-banner__text .banner-title .the-description {
     color: var(--text-color, #fff);
     font-weight: var(--text-weight);
-    /*
-        - Font size option for Description in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
-    /*
-        - Font size option for Description in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
-    /*
-        - Text Alignment option for Description in Desktop
-        - Value is from Customizer
-        - (d fo Desktop)
-    */
-    /*
-        - Text Alignment option for Description in Mobile
-        - Value is from Customizer
-        - (m fo Mobile)
-    */
   }
   @media (max-width: 991.98px) {
     .slideshow-banner__text .banner-title .the-description.font-xxsmall-m {
@@ -970,15 +862,7 @@
   }
   .slideshow-banner__text .banner-button-container {
     position: relative;
-    height: 100%;
-    display: flex;
-    width: 100%;
-    justify-content: flex-start;
-  }
-  @media (max-width: 991.98px) {
-    .slideshow-banner__text .banner-button-container {
-      justify-content: center;
-    }
+    margin-top: 20px;
   }
   .slideshow-banner__text .banner-buttons {
     z-index: 2;
@@ -993,21 +877,16 @@
   .slideshow-banner__text .banner-buttons .btn {
     text-align: center;
     text-transform: uppercase;
-    border-radius: 0;
     width: 100%;
-    color: transparent;
-  }
-  .slideshow-banner__text .banner-buttons .btn-shop-now {
-    background-color: transparent;
-    box-shadow: none;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: #C6474B;
   }
   @media (max-width: 767.98px) {
     .slideshow-banner__text .banner-buttons .btn-shop-now {
       margin-right: 0;
     }
-  }
-  .slideshow-banner__text .banner-buttons .btn-learn-more {
-    background-color: transparent;
   }
   .slideshow-banner__text .banner-buttons.button-inverted .btn-shop-now {
     margin-right: 15px;
@@ -1091,7 +970,7 @@
     font-size: 17px;
     font-style: normal;
     font-weight: bold;
-    line-height: 33px; /* 137.5% */
+    line-height: 33px; 
     letter-spacing: 4px;
     text-transform: uppercase;
   }
@@ -1151,7 +1030,7 @@
   }
   @media (min-width: 992px) {
     .slideshow-banner__text.width-small-d {
-      width: 40%;
+      width: 28%;
     }
   }
   @media (min-width: 992px) {
@@ -1215,8 +1094,8 @@
   }
   @media (min-width: 992px) {
     .slideshow-banner__text.bottom-left-d {
-      bottom: 7.5rem;
-      left: 3.125rem;
+        bottom: 9rem;
+        left: 15rem;
     }
   }
   @media (min-width: 992px) {
