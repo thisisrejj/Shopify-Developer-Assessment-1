@@ -99,3 +99,15 @@ border: 1px solid #000;
     max-width: 80%;
 }
 }
+.cart-count-bubble {
+    color: #000;
+    font-size: 12px;
+    line-height: 1;
+    padding: 4px 6px;
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    min-width: 1.5rem;
+    text-align: center;
+  }
+  

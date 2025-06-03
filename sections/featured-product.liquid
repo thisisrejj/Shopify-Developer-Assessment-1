@@ -121,23 +121,22 @@
 
       function updateCartCount() {
         fetch('/cart.js')
-          .then((response) => response.json())
-          .then((cart) => {
+        .then(res => res.json())
+        .then(cart => {
             const count = cart.item_count;
-            const cartCountBubble = document.querySelector('.cart-count-bubble');
+            const bubble = document.querySelector('.cart-count-bubble');
 
-            if (count > 0) {
-              if (cartCountBubble) {
-                cartCountBubble.innerHTML = '<span aria-hidden="true">${count}</span>';
-              } else {
-                const newBubble = document.createElement('div');
-                newBubble.className = 'cart-count-bubble';
-                newBubble.innerHTML = '<span aria-hidden="true">${count}</span>';
-                document.getElementById('cart-icon-bubble').appendChild(newBubble);
-              }
+            if (bubble) {
+            bubble.innerHTML = '<span aria-hidden="true">${count}</span>';
+            } else {
+            const newBubble = document.createElement('div');
+            newBubble.className = 'cart-count-bubble';
+            newBubble.innerHTML = '<span aria-hidden="true">${count}</span>';
+            document.getElementById('cart-icon-bubble').appendChild(newBubble);
             }
-          });
-      }
+        })
+        .catch(err => console.error('Cart count update error:', err));
+
     });
   </script>
 {% else %}
