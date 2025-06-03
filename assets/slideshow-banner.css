@@ -155,7 +155,6 @@
   }
   @media (max-width: 991.98px) {
     .slideshow-banner__text {
-      top: 18%;
       width: 80%;
       right: 0;
       left: 0;
@@ -1000,7 +999,7 @@
   }
   @media (min-width: 992px) {
     .slideshow-banner__text .banner-buttons.width-small-d {
-      width: 40%;
+      width: 50%;
     }
   }
   @media (min-width: 992px) {
@@ -1148,13 +1147,6 @@
   @media (max-width: 991.98px) {
     .slideshow-banner__text.bottom-m {
       bottom: 13%;
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-    }
-  }
-  @media (min-width: 992px) {
-    .slideshow-banner__text.bottom-m {
       left: 0;
       right: 0;
       margin: 0 auto;

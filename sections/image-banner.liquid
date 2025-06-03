@@ -291,8 +291,8 @@
                   <h2 class="the-title {{ main_title_utility | escape }}">
                     {{ block.settings.main_title }}
                   </h2>
-                  <p class="the-description {{ description_utility | escape }}">
-                    {% if block.settings.description != blank -%}
+                  {% if block.settings.description != blank -%}
+                    <p class="the-description {{ description_utility | escape }}">
                       <span
                         {% if block.settings.description_mobile != blank %}
                           class="hidden-pocket"
@@ -300,11 +300,12 @@
                       >
                         {{- block.settings.description -}}
                       </span>
-                    {%- endif %}
-                    {% if block.settings.description_mobile != blank -%}
-                      <span class="hidden-lap-and-up">{{ block.settings.description_mobile }}</span>
-                    {%- endif %}
-                  </p>
+
+                      {% if block.settings.description_mobile != blank -%}
+                        <span class="hidden-lap-and-up">{{ block.settings.description_mobile }}</span>
+                      {%- endif %}
+                    </p>
+                  {%- endif %}
                 </div>
                 <!-- end of .slideshow-banner__title -->
 
