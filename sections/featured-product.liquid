@@ -53,7 +53,8 @@
 
     <p><strong>Delivery:</strong> {{ section.settings.delivery_info }}</p>
 
-    {% form 'product', product, id: "product-form-" | append: product.id %}
+    {% assign form_id = 'product-form-' | append: product.id %}
+    {% form 'product', product, id: form_id %}
       {% if product.variants.size > 1 %}
         <div class="variant-selector">
           {% for option in product.options_with_values %}
