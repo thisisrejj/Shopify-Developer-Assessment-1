@@ -1,3 +1,39 @@
+<style>
+  .product-accordion {
+    border-top: 1px solid #e1e1e1;
+  }
+  .accordion-item {
+    border-bottom: 1px solid #e1e1e1;
+  }
+  .accordion-toggle {
+    background: none;
+    border: none;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .accordion-toggle .icon {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.3s ease;
+  }
+  .accordion-item.active .icon {
+    transform: rotate(180deg);
+  }
+  .accordion-content {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease;
+    padding: 0 1rem;
+  }
+</style>
+
 {% assign product = all_products[section.settings.product] %}
 
 <div class="product-accordion">
