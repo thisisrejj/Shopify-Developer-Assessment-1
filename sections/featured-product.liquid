@@ -123,8 +123,18 @@
         fetch('/cart.js')
           .then((response) => response.json())
           .then((cart) => {
-            if (cartCount) {
-              cartCount.textContent = cart.item_count;
+            const count = cart.item_count;
+            const cartCountBubble = document.querySelector('.cart-count-bubble');
+
+            if (count > 0) {
+              if (cartCountBubble) {
+                cartCountBubble.innerHTML = `<span aria-hidden="true">${count}</span>`;
+              } else {
+                const newBubble = document.createElement('div');
+                newBubble.className = 'cart-count-bubble';
+                newBubble.innerHTML = `<span aria-hidden="true">${count}</span>`;
+                document.getElementById('cart-icon-bubble').appendChild(newBubble);
+              }
             }
           });
       }
