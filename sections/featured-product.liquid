@@ -20,6 +20,12 @@
 {% assign product = all_products[section.settings.product] %}
 {% if product %}
   <div class="featured-product">
+    {% if product.images.size > 0 %}
+      <div class="product-thumbnail">
+        <img src="{{ product.images.first | image_url: width: 600 }}" alt="{{ product.title | escape }}">
+      </div>
+    {% endif %}
+
     <h2 class="product-title">{{ product.title }}</h2>
 
     <div class="price">
