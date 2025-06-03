@@ -1,0 +1,318 @@
+{% liquid
+  assign medias = product.media | where: 'media_type', 'image'
+  assign media_videos = product.media | where: 'media_type', 'video'
+%}
+{%- if product.media.size > 0 -%}
+  {%- assign show_thumbnails_if_one_image = true -%}
+
+  <div class="card{% if template.name == 'product' %} card--sticky{% endif %} pdp__mobile-slider">
+    <div class="card__section card__section--tight">
+      <div class="product-gallery {% if show_thumbnails_if_one_image %}product-gallery--with-thumbnails{% endif %}">
+        {%- assign selected_image = product.selected_variant.featured_media | default: product.featured_media -%}
+        {% liquid
+          assign tags = product.tags
+          assign is_tall_boots = false
+
+          if tags contains 'Boot Height_Boot Height: Knee' or tags contains 'Tall Boots'
+            assign is_tall_boots = true
+          endif
+        %}
+        <div class="product__carousel-wrapper" data-current-media="{{ selected_image.id }}">
+          <div
+            class="product__carousel {% if template != 'product.quick-view' and section.settings.enable_image_zoom %}product__carousel--zoomable{% endif %}"
+            data-image-count="{{ product.media.size }}"
+            data-initial-image-id="{{ selected_image.id }}"
+          >
+            {%- for media in medias -%}
+              {% liquid
+                assign aspect_ratio = media.aspect_ratio
+                assign original_ratio = media.aspect_ratio
+                if is_tall_boots
+                  assign aspect_ratio = 0.7963340122199593
+                endif
+                assign ratio_floor = aspect_ratio | floor
+                assign image_alt = image.alt
+              %}
+              {% if forloop.index == 4 %}
+                {% for media in media_videos %}
+                  <div
+                    class="product-gallery__carousel-item gallery__item_video{% if media.id == selected_image.id %} is-gallery-selected{% endif %}"
+                    data-image-id="{{ media.id }}"
+                    data-aspect-ratio="{{ original_ratio }}"
+                  >
+                    <div class="product-gallery__size-limiter border-r-md overflow-hidden">
+                      <div class="product-gallery__item_video_wrapper">
+                        {{-
+                          media
+                          | video_tag:
+                            image_size: '1024x',
+                            controls: true,
+                            loop: '',
+                            autoplay: '',
+                            muted: '',
+                            controls: false
+                        -}}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+              <div
+                class="product-gallery__carousel-item{% if media.id == selected_image.id %} is-gallery-selected{% endif %}"
+                data-image-id="{{ media.id }}"
+                data-aspect-ratio="{{ original_ratio }}"
+              >
+                <div class="product-gallery__size-limiter border-r-md overflow-hidden">
+                  {%- include 'image-size', sizes: '400,500,600,700,800,900,1000,1100,1200', image: media -%}
+                  {% liquid
+                    assign img_width = media.width
+                    assign img_height = img_width | divided_by: media.aspect_ratio
+                  %}
+                  {% if ratio_floor < 1 %}
+                    <div class="gallery__hd_img">
+                      <img
+                        class="product-gallery__image lazyload image--blur-up"
+                        width="{{ img_width }}"
+                        height="{{ img_height }}"
+                        src="{{ media | img_url: '60x' }}"
+                        data-src="{{ image_url }}"
+                        data-widths="[{{ supported_sizes }}]"
+                        data-sizes="auto"
+                        data-zoom="{{ media | img_url: '1600x' }}"
+                        alt="{% if forloop.first %}{{ image_alt | escape }}{% endif %}"
+                      >
+                    </div>
+                  {% else %}
+                    <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                      <img
+                        class="product-gallery__image lazyload image--blur-up"
+                        width="{{ img_width }}"
+                        height="{{ img_height }}"
+                        src="{{ media | img_url: '60x' }}"
+                        data-src="{{ image_url }}"
+                        data-widths="[{{ supported_sizes }}]"
+                        data-sizes="auto"
+                        data-zoom="{{ media | img_url: '1600x' }}"
+                        alt="{% if forloop.first %}{{ image_alt | escape }}{% endif %}"
+                      >
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if template != 'product.quick-view'
+            and section.settings.enable_image_zoom
+            and section.settings.show_zoom_notice
+          -%}
+            <span class="product-gallery__zoom-notice">
+              {%- include 'icon' with 'zoom' %}
+              {{ 'product.general.zoom' | t -}}
+            </span>
+          {%- endif -%}
+        </div>
+
+        {%- if show_thumbnails_if_one_image -%}
+          <div class="scroller">
+            <div class="scroller__inner">
+              <div class="product-gallery__thumbnail-list">
+                {%- for media in medias -%}
+                  {%- liquid
+                    assign image_alt = media.alt
+                    assign is_video = false
+                    assign selected_image = product.selected_variant.featured_media | default: product.featured_media
+
+                    if media.media_type == 'video' or media.media_type == 'external_video'
+                      assign is_video = true
+                    endif
+                    assign ratio_floor = media.aspect_ratio | floor
+                  -%}
+                  {% if forloop.index == 4 %}
+                    {% for media in media_videos %}
+                      <div
+                        class="product-gallery__thumbnail{% if is_video %} product-gallery__thumbnail--video{% endif %}{% if media.id == selected_image.id %} is-nav-selected{% endif %}"
+                        data-image-id="{{ media.id }}"
+                        data-aspect-ratio="{{ media.aspect_ratio }}"
+                      >
+                        <div class="thumbnail-video_wrapper">
+                          <img
+                            src="{{ media | img_url: '130x' }}"
+                            alt="{% if forloop.first %}{{ image_alt | escape }}{% endif %}"
+                          >
+                        </div>
+
+                        {% include 'icon' with 'play' %}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                  <div
+                    class="product-gallery__thumbnail{% if is_video %} product-gallery__thumbnail--video{% endif %}{% if media.id == selected_image.id %} is-nav-selected{% endif %}"
+                    data-image-id="{{ media.id }}"
+                    data-aspect-ratio="{{ media.aspect_ratio }}"
+                  >
+                    {% if is_video or ratio_floor < 1 %}
+                      <div class="thumbnail-video_wrapper">
+                        <img
+                          src="{{ media | img_url: '130x' }}"
+                          alt="{% if forloop.first %}{{ image_alt | escape }}{% endif %}"
+                        >
+                      </div>
+                    {% else %}
+                      <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                        <img
+                          src="{{ media | img_url: '130x' }}"
+                          alt="{% if forloop.first %}{{ image_alt | escape }}{% endif %}"
+                        >
+                      </div>
+                    {% endif %}
+
+                    {%- if is_video -%}
+                      {% include 'icon' with 'play' %}
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+          <div class="Product__Gallery__control">
+            <button class="Product__Gallery_arrows prev" type="button" data-control="left">
+              {% render 'icon', icon: 'arrow-left' %}
+            </button>
+            <button class="Product__Gallery_arrows next" type="button" data-control="right">
+              {% render 'icon', icon: 'arrow-right' %}
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}This code is used to power the mobile zoom and must not be removed nor altered{%- endcomment -%}
+  <div id="mobile-gallery" class="zoom" role="dialog" aria-hidden="true">
+    <div class="zoom__container">
+      <span class="close-mobile-gallery">&plus;</span>
+
+      <div class="gallery__wrapper">
+        <div class="gallery__carousel-wrapper">
+          {%- for image in product.images -%}
+            {%- assign is_video = false -%}
+            {%- assign is_image_group = false -%}
+            {%- assign is_image_filtered = false -%}
+            {%- assign image_alt = image.alt -%}
+
+            {%- if image.alt contains 'youtube.com/embed' or image.alt contains 'player.vimeo.com' -%}
+              {%- assign is_video = true -%}
+            {%- else -%}
+              {%- if image.alt contains '#' -%}
+                {%- assign is_image_group = true -%}
+                {%- assign alt_parts = image.alt | split: '#' -%}
+
+                {%- comment -%}
+                  If the custom ALT tag contains two parts (for instance "My custom alt # color_blue") then the first part is actually used
+                  as a custom ALT tag
+                {%- endcomment -%}
+
+                {%- if alt_parts.size == 2 and alt_parts.first != blank -%}
+                  {%- assign image_alt = alt_parts.first | strip -%}
+                {%- else -%}
+                  {%- assign image_alt = product.title -%}
+                {%- endif -%}
+
+                {%- assign image_group_parts = alt_parts.last | split: '_' -%}
+
+                {%- for option in product.options -%}
+                  {%- assign downcase_option = option | downcase -%}
+                  {%- assign downcase_group_option = image_group_parts.first | strip | downcase -%}
+
+                  {%- if downcase_option == downcase_group_option -%}
+                    {%- assign option_setting = 'option' | append: forloop.index -%}
+                    {%- assign option_value = product.selected_or_first_available_variant[option_setting] | downcase -%}
+
+                    {%- assign downcase_group_value = image_group_parts.last | strip | downcase -%}
+                    {%- assign image_variant_ids = image.variants | map: 'id' -%}
+
+                    {%- if option_value != downcase_group_value -%}
+                      {%- unless image_variant_ids contains product.selected_or_first_available_variant.id -%}
+                        {%- assign is_image_filtered = true -%}
+                      {%- endunless -%}
+                    {%- endif -%}
+
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            <div
+              class="product-gallery__carousel-item {% if image.id == selected_image.id %}is-selected{% endif %} {% if is_image_filtered %}is-filtered{% endif %}"
+              data-image-id="{{ image.id }}"
+              {% if is_image_group %}
+                data-group-name="{{ image_group_parts.first | strip | downcase | escape }}"
+                data-group-value="{{ image_group_parts.last | strip | downcase | escape }}"
+              {% endif %}
+            >
+              <div
+                class="product-gallery__size-limiter border-r-md overflow-hidden"
+                style="max-width: {{ image.width }}px"
+              >
+                {%- include 'image-size', sizes: '400,500,600,700,800,900,1000,1100,1200', image: image -%}
+
+                {%- if is_video -%}
+                  <div class="video-wrapper">
+                    {%- if image.alt contains 'youtube.com/embed' -%}
+                      <iframe
+                        class="lazyload"
+                        data-src="{{ image.alt | escape | split: '?' | first }}?showinfo=0&controls=1&rel=0&modestbranding=1"
+                        frameborder="0"
+                        allowfullscreen
+                      ></iframe>
+                    {%- else -%}
+                      <iframe
+                        class="lazyload"
+                        data-src="{{ image.alt | escape | split: '?' | first }}?portrait=0&byline=0&color={{ settings.accent_color | remove_first: '#' }}"
+                        frameborder="0"
+                        allowfullscreen
+                      ></iframe>
+                    {%- endif -%}
+                  </div>
+                {%- else -%}
+                  <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: image.aspect_ratio }}%">
+                    <img
+                      class="product-gallery__image lazyload image--blur-up"
+                      src="{{ image | img_url: '60x' }}"
+                      data-src="{{ image_url }}"
+                      data-widths="[{{ supported_sizes }}]"
+                      data-sizes="auto"
+                      data-zoom="{{ image | img_url: '1600x' }}"
+                      alt="{% if forloop.first %}{{ image_alt | escape }}{% endif %}"
+                    >
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+<script src="{{ 'z_pdp_thumbnail.js' | asset_url }}" defer></script>
+
+<script>
+  {% comment %} document.addEventListener('DOMContentLoaded', function(e) {
+
+        setTimeout(() => {
+            const addon_slideshow = new Flickity(document.querySelector('.product__carousel'), {
+            // options
+            cellAlign: 'left',
+            prevNextButtons: false,
+            pageDots: false,
+            adaptiveHeight: true,
+            contain: true,
+            groupCells: 2,
+            percentPosition: true
+            });
+        },1000)
+  }) {% endcomment %}
+</script>

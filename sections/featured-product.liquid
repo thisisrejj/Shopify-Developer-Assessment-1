@@ -44,6 +44,7 @@
   <div class="container container--flush">
     <div class="featured-product">
       {%- unless product.empty? -%}
+        {%- include 'product-gallery' -%}
         {%- include 'product-more-info' -%}
       {%- else -%}
         {% comment %}
