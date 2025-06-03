@@ -38,18 +38,6 @@
           }
       {% endif %}
   {%- endfor -%}
-
-  /* .slideshow-banner__text .banner-buttons .btn-shop-now {
-      background: url('{{ 'save_btn.png' | file_img_url: 'large' }}');
-      background-size: cover;
-      background-repeat: no-repeat;
-  }
-
-  .slideshow-banner__text .banner-buttons .btn-learn-more {
-      background: url('{{ 'sign_up_btn.png' | file_img_url: 'large' }}');
-      background-size: cover;
-      background-repeat: no-repeat;
-  } */
 {%- endstyle -%}
 
 <div class="container">
@@ -154,8 +142,8 @@
 
                 {% if block.settings.slide_type == 'video' and block.settings.slide_video != blank %}
                   {%- capture id -%}
-                                        video-{{ block.settings.slide_video.id }}-{{ forloop.index }}
-                                    {%- endcapture -%}
+                      video-{{ block.settings.slide_video.id }}-{{ forloop.index }}
+                  {%- endcapture -%}
 
                   {%- if block.settings.slide_video != blank -%}
                     {{
@@ -175,8 +163,8 @@
 
                 {% if block.settings.slide_type_mobile == 'video' and block.settings.slide_video_mobile != blank %}
                   {%- capture id_mobile -%}
-                                        video-{{ block.settings.slide_video_mobile.id }}-{{ forloop.index }}
-                                    {%- endcapture -%}
+                      video-{{ block.settings.slide_video_mobile.id }}-{{ forloop.index }}
+                  {%- endcapture -%}
 
                   {%- if block.settings.slide_video_mobile != blank -%}
                     {{
@@ -325,19 +313,14 @@
                     <div class="banner-buttons {{ banner_text_button_utitity | escape }} {% if block.settings.button_inverted %} button-inverted {% endif %}">
                       {% if block.settings.shop_now_url != blank %}
                         <a href="{{ block.settings.shop_now_url }}" class="btn btn-shop-now">
-                          {% comment %} {{ block.settings.shop_now_btn }} {% endcomment %}
-                          <img class="save_btn" src="{{ 'save_btn.png' | file_img_url: 'large' }}">
-                          <img class="save_btn_mobile" src="{{ 'save_btn_mobile.png' | file_img_url: 'large' }}">
+                          {{ block.settings.shop_now_btn }}
                         </a>
                       {% endif %}
-                      {% comment %}
-                        {% if block.settings.learn_more_url != blank %}
-                            <a href="{{ block.settings.learn_more_url }}" class="btn btn-learn-more">
-                                {% comment %} {{ block.settings.learn_more_btn }} {% endcomment %}
-                                <img src="{{ 'sign_up_btn.png' | file_img_url: 'large' }}">
-                            </a>
-                        {% endif %}
-                      {% endcomment %}
+                      {% if block.settings.learn_more_url != blank %}
+                        <a href="{{ block.settings.learn_more_url }}" class="btn btn-learn-more">
+                          {{ block.settings.learn_more_btn }}
+                        </a>
+                      {% endif %}
                     </div>
                   </div>
                 {% endif %}
@@ -367,27 +350,6 @@
                   {% render 'icon', icon: 'vid-pause-btn' %}
                   {% render 'icon', icon: 'vid-play-btn' %}
                 </button>
-              {% endif %}
-
-              {% if block.settings.featured_product != blank %}
-                {% assign product = all_products[block.settings.featured_product] %}
-                <div class="slideshow-banner__product slideshow-product-{{ forloop.index }} {{ banner_product_utility | escape }} {% if block.settings.hide_product_mobile %} hide-product-m {% endif %} border-r-md">
-                  <a href="{{ product.url }}" class="product-link">
-                    <div class="image-card">
-                      <div class="image-card--wrapper">
-                        {% if product.featured_media != blank %}
-                          {{ product.featured_media | media_tag: image_size: '400x' }}
-                        {% endif %}
-                      </div>
-                    </div>
-
-                    <div class="product-card">
-                      <h6 class="title">{{ product.title }}</h6>
-                      <span class="price">{{ product.price | money }}</span>
-                      <a href="{{ product.url }}" class="link">{{ block.settings.featured_product_label }}</a>
-                    </div>
-                  </a>
-                </div>
               {% endif %}
             </div>
             <!-- end of .slideshow-banner__slide -->
@@ -425,14 +387,6 @@
 {
   "name": "Image Banner",
   "settings": [
-    {
-      "type": "header",
-      "content": "Banner Title Settings"
-    },
-    {
-      "type": "header",
-      "content": "Sub Title Settings"
-    },
     {
       "type": "header",
       "content": "Slider Configutation"
@@ -1668,59 +1622,6 @@
           "id": "learn_more_btn",
           "label": "Learn More Button Label",
           "default": "Learn More"
-        },
-        {
-          "type": "header",
-          "content": "FEATURED PRODUCT"
-        },
-        {
-          "type": "product",
-          "id": "featured_product",
-          "label": "Product"
-        },
-        {
-          "type": "header",
-          "content": "Desktop Settings"
-        },
-        {
-          "type": "select",
-          "id": "product_position",
-          "label": "Product Position Desktop",
-          "options": [
-            {
-              "value": "bottom-left-d",
-              "label": "Bottom Left"
-            },
-            {
-              "value": "bottom-right-d",
-              "label": "Bottom Right"
-            },
-            {
-              "value": "top-left-d",
-              "label": "Top Left"
-            },
-            {
-              "value": "top-right-d",
-              "label": "Top Right"
-            }
-          ],
-          "default": "bottom-right-d"
-        },
-        {
-          "type": "header",
-          "content": "Mobile Settings"
-        },
-        {
-          "type": "checkbox",
-          "id": "hide_product_mobile",
-          "label": "Hide Featured Product (Mobile)",
-          "default": false
-        },
-        {
-          "type": "text",
-          "id": "featured_product_label",
-          "label": "Shop Now",
-          "default": "Shop Now"
         }
       ]
     }
