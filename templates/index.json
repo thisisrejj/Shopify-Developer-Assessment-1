@@ -145,7 +145,7 @@
       "type": "featured-product",
       "name": "Featured product",
       "settings": {
-        "product": ""
+        "product": "featured-product-name"
       }
     }
   },
