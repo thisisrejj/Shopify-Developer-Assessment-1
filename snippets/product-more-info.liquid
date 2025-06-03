@@ -1,9 +1,34 @@
 {% assign product = all_products[section.settings.product] %}
 
-{% if product.metafields.custom.material %}
-  <p><strong>Material:</strong> {{ product.metafields.custom.material | metafield_tag }}</p>
-{% endif %}
+<div class="product-accordion">
+  {% if product.metafields.custom.material %}
+    <div class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false">Material</button>
+      <div class="accordion-content" hidden>
+        {{ product.metafields.custom.material | metafield_tag }}
+      </div>
+    </div>
+  {% endif %}
 
-{% if product.metafields.custom.delivery %}
-  <p><strong>Delivery:</strong> {{ product.metafields.custom.delivery | metafield_tag }}</p>
-{% endif %}
+  {% if product.metafields.custom.delivery %}
+    <div class="accordion-item">
+      <button class="accordion-toggle" type="button" aria-expanded="false">Delivery</button>
+      <div class="accordion-content" hidden>
+        {{ product.metafields.custom.delivery | metafield_tag }}
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.accordion-toggle').forEach((button) => {
+      button.addEventListener('click', () => {
+        const content = button.nextElementSibling;
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', !expanded);
+        content.hidden = expanded;
+      });
+    });
+  });
+</script>

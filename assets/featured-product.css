@@ -1,0 +1,17 @@
+.accordion-item {
+    border-bottom: 1px solid #ddd;
+    padding: 1em 0;
+  }
+  .accordion-toggle {
+    font-weight: bold;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    padding: 0.5em 0;
+  }
+  .accordion-content {
+    padding: 0.5em 0 0 1em;
+  }
+  
