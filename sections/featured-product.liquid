@@ -20,66 +20,70 @@
 {% assign product = all_products[section.settings.product] %}
 {% if product %}
   <div class="featured-product">
-    {% if product.images.size > 0 %}
-      <div class="product-thumbnail">
-        <img src="{{ product.images.first | image_url: width: 600 }}" alt="{{ product.title | escape }}">
-      </div>
-    {% endif %}
-
-    <h2 class="product-title">{{ product.title }}</h2>
-
-    <div class="price">
-      {% if product.compare_at_price > product.price %}
-        <span class="sale-price">{{ product.price | money }}</span>
-        <span class="compare-price">{{ product.compare_at_price | money }}</span>
-      {% else %}
-        <span class="regular-price">{{ product.price | money }}</span>
-      {% endif %}
-    </div>
-
-    <div class="product-description">
-      {{ product.description | strip_html | truncatewords: 55, '…' }}
-    </div>
-
-    <div class="product-tags">
-      {% for tag in product.tags %}
-        <span class="tag">{{ tag }}</span>
-      {% endfor %}
-    </div>
-
-    {% assign form_id = 'product-form-' | append: product.id %}
-    {% form 'product', product, id: form_id %}
-      {% if product.variants.size > 1 %}
-        <div class="variant-selector">
-          {% for option in product.options_with_values %}
-            <label>{{ option.name }}</label>
-            <select name="options[{{ option.name }}]">
-              {% for value in option.values %}
-                <option value="{{ value }}">{{ value }}</option>
-              {% endfor %}
-            </select>
-          {% endfor %}
+    <div class="container">
+      {% if product.images.size > 0 %}
+        <div class="product-thumbnail">
+          <img src="{{ product.images.first | image_url: width: 600 }}" alt="{{ product.title | escape }}">
         </div>
       {% endif %}
 
-      <label for="quantity">Quantity:</label>
-      <input type="number" name="quantity" id="quantity" value="1" min="1">
+      <div class="product-content">
+        <h2 class="product-title">{{ product.title }}</h2>
 
-      <button
-        type="submit"
-        id="add-to-cart"
-        class="add-to-cart-button"
-        {% unless product.available %}
-          disabled
-        {% endunless %}
-      >
-        {% if product.available %}
-          Add to Cart
-        {% else %}
-          Sold Out
-        {% endif %}
-      </button>
-    {% endform %}
+        <div class="price">
+          {% if product.compare_at_price > product.price %}
+            <span class="sale-price">{{ product.price | money }}</span>
+            <span class="compare-price">{{ product.compare_at_price | money }}</span>
+          {% else %}
+            <span class="regular-price">{{ product.price | money }}</span>
+          {% endif %}
+        </div>
+
+        <div class="product-description">
+          {{ product.description | strip_html | truncatewords: 55, '…' }}
+        </div>
+
+        <div class="product-tags">
+          {% for tag in product.tags %}
+            <span class="tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+
+        {% assign form_id = 'product-form-' | append: product.id %}
+        {% form 'product', product, id: form_id %}
+          {% if product.variants.size > 1 %}
+            <div class="variant-selector">
+              {% for option in product.options_with_values %}
+                <label>{{ option.name }}</label>
+                <select name="options[{{ option.name }}]">
+                  {% for value in option.values %}
+                    <option value="{{ value }}">{{ value }}</option>
+                  {% endfor %}
+                </select>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <label for="quantity">Quantity:</label>
+          <input type="number" name="quantity" id="quantity" value="1" min="1">
+
+          <button
+            type="submit"
+            id="add-to-cart"
+            class="add-to-cart-button"
+            {% unless product.available %}
+              disabled
+            {% endunless %}
+          >
+            {% if product.available %}
+              Add to Cart
+            {% else %}
+              Sold Out
+            {% endif %}
+          </button>
+        {% endform %}
+      </div>
+    </div>
   </div>
 
   {% render 'product-more-info' %}
