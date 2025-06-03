@@ -140,9 +140,17 @@
         "autoplay_speed": 5,
         "pause_on_hover": false
       }
+    },
+    "featured_product_fHAkMn": {
+      "type": "featured-product",
+      "name": "Featured product",
+      "settings": {
+        "product": ""
+      }
     }
   },
   "order": [
-    "image_banner"
+    "image_banner",
+    "featured_product_fHAkMn"
   ]
 }
