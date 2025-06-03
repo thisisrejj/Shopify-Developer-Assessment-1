@@ -1,1 +1,7 @@
-<div>[Place the accordion here]</div>
+{% if product.metafields.custom.material %}
+  <p><strong>Material:</strong> {{ product.metafields.custom.material | metafield_tag }}</p>
+{% endif %}
+
+{% if product.metafields.custom.delivery %}
+  <p><strong>Delivery:</strong> {{ product.metafields.custom.delivery | metafield_tag }}</p>
+{% endif %}
