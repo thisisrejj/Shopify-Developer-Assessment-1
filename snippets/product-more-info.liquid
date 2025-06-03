@@ -1,3 +1,5 @@
+{% assign product = all_products[section.settings.product] %}
+
 {% if product.metafields.custom.material %}
   <p><strong>Material:</strong> {{ product.metafields.custom.material | metafield_tag }}</p>
 {% endif %}
