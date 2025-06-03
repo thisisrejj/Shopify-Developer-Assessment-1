@@ -7,12 +7,6 @@
       "type": "product",
       "id": "product",
       "label": "Select Product"
-    },
-    {
-      "type": "text",
-      "id": "delivery_info",
-      "label": "Delivery Information",
-      "default": "Standard delivery within 3-5 business days."
     }
   ],
   "presets": [
@@ -48,10 +42,12 @@
     </div>
 
     {% if product.metafields.custom.material %}
-      <p><strong>Material:</strong> {{ product.metafields.custom.material }}</p>
+      <p><strong>Material:</strong> {{ product.metafields.custom.material | strip_html }}</p>
     {% endif %}
 
-    <p><strong>Delivery:</strong> {{ section.settings.delivery_info }}</p>
+    {% if product.metafields.custom.delivery %}
+      <p><strong>Delivery:</strong> {{ product.metafields.custom.delivery | strip_html }}</p>
+    {% endif %}
 
     {% assign form_id = 'product-form-' | append: product.id %}
     {% form 'product', product, id: form_id %}
