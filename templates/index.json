@@ -18,6 +18,7 @@
             "slide_type": "image",
             "slide_type_mobile": "image",
             "slide_image": "shopify://shop_images/photographer-working-at-his-desk.jpg",
+            "slide_image_mobile": "shopify://shop_images/hands-hold-paint-items-over-a-pallet.jpg",
             "video_button_position": "bottom-right",
             "slideshow_video_autoplay": false,
             "slideshow_video_mute": false,
@@ -36,7 +37,7 @@
             "sub_title_color_mobile": "#2bd896",
             "sub_title_weight_mobile": "400",
             "main_title": "We Design, Build and Optimise Exceptional Ecommerce Websites.",
-            "main_title_fontsize_desktop": "font-8xlarge-d",
+            "main_title_fontsize_desktop": "font-4xlarge-d",
             "main_title_mt_desktop": "mt-medium-d",
             "main_title_mb_desktop": "mb-medium-d",
             "main_title_text_align_desktop": "text-left-d",
@@ -61,17 +62,13 @@
             "show_button": true,
             "button_inverted": false,
             "button_position_desktop": "left-d",
-            "button_size_desktop": "medium-d",
+            "button_size_desktop": "large-d",
             "button_position_mobile": "center-m",
             "button_size_mobile": "small-m",
             "shop_now_url": "#",
             "shop_now_btn": "Start Your Project",
             "learn_more_url": "",
-            "learn_more_btn": "",
-            "featured_product": "",
-            "product_position": "bottom-right-d",
-            "hide_product_mobile": false,
-            "featured_product_label": "Shop Now"
+            "learn_more_btn": ""
           }
         },
         "slide_QkHCpD": {
@@ -79,7 +76,8 @@
           "settings": {
             "slide_type": "image",
             "slide_type_mobile": "image",
-            "slide_image": "shopify://shop_images/hands-hold-paint-items-over-a-pallet.jpg",
+            "slide_image": "shopify://shop_images/photographer-working-at-his-desk.jpg",
+            "slide_image_mobile": "shopify://shop_images/hands-hold-paint-items-over-a-pallet.jpg",
             "video_button_position": "bottom-right",
             "slideshow_video_autoplay": false,
             "slideshow_video_mute": false,
@@ -98,7 +96,7 @@
             "sub_title_color_mobile": "#2bd896",
             "sub_title_weight_mobile": "400",
             "main_title": "We Design, Build and Optimise Exceptional Ecommerce Websites.",
-            "main_title_fontsize_desktop": "font-8xlarge-d",
+            "main_title_fontsize_desktop": "font-4xlarge-d",
             "main_title_mt_desktop": "mt-medium-d",
             "main_title_mb_desktop": "mb-medium-d",
             "main_title_text_align_desktop": "text-left-d",
@@ -123,17 +121,13 @@
             "show_button": true,
             "button_inverted": false,
             "button_position_desktop": "left-d",
-            "button_size_desktop": "medium-d",
+            "button_size_desktop": "large-d",
             "button_position_mobile": "center-m",
             "button_size_mobile": "small-m",
             "shop_now_url": "#",
             "shop_now_btn": "Start Your Project",
             "learn_more_url": "",
-            "learn_more_btn": "",
-            "featured_product": "",
-            "product_position": "bottom-right-d",
-            "hide_product_mobile": false,
-            "featured_product_label": "Shop Now"
+            "learn_more_btn": ""
           }
         }
       },
@@ -142,7 +136,7 @@
         "slide_QkHCpD"
       ],
       "settings": {
-        "autoplay": false,
+        "autoplay": true,
         "autoplay_speed": 5,
         "pause_on_hover": false
       }
