@@ -128,11 +128,11 @@
 
             if (count > 0) {
               if (cartCountBubble) {
-                cartCountBubble.innerHTML = `<span aria-hidden="true">${count}</span>`;
+                cartCountBubble.innerHTML = '<span aria-hidden="true">${count}</span>';
               } else {
                 const newBubble = document.createElement('div');
                 newBubble.className = 'cart-count-bubble';
-                newBubble.innerHTML = `<span aria-hidden="true">${count}</span>`;
+                newBubble.innerHTML = '<span aria-hidden="true">${count}</span>';
                 document.getElementById('cart-icon-bubble').appendChild(newBubble);
               }
             }
